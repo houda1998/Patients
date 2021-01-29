@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+layout:decorator="template">
+<head>
+<meta charset="ISO-8859-1">
+<title>Patients</title>
+<link rel="stylesheet" type="text/css"
+	href="/webjars/bootstrap/4.1.0/css/bootstrap.min.css">
+</head>
+<body>
+<div layout:fragment="content">
+	<div class="container mt-5">
+		<div class="card">
+			<div class="card-header">Liste de patients</div>
+			<div class="card-body">
+				<form th:action="@{patients}" method="get">
+					<div class="mb-3">
+						<label class="control-label">Mot Cle :</label> <input type="text"
+							name="motCle" th:value="${motCle}" class="p-1">
+						<button class="btn btn-primary">chercher</button>
+					</div>
+				</form>
+				<table class="table">
+					<tr>
+						<th>id</th>
+						<th>Name</th>
+						<th>DateNaissance</th>
+						<th>malade</th>
+						<th>score</th>
+						<th></th>
+						<th></th>
+					</tr>
+					<tr th:each="p:${pagePatients.content}">
+						<td th:text="${p.id}"></td>
+						<td th:text="${p.name}"></td>
+						<td th:text="${p.dateNaissance}"></td>
+						<td th:text="${p.malade}"></td>
+						<td th:text="${p.score}"></td>
+						<td><a
+							onclick="javascript:return confirm('Etes vous sure de vouloir supprimer cet element ?')"
+							class="btn btn-danger"
+							th:href="@{deletePatient(id=${p.id},page=${currentPage},size=${size},motCle=${motCle})}">
+							Delete</a></td>
+							<td><a style="width:70px"
+							
+							class="btn btn-primary"
+							th:href="@{editPatient(id=${p.id})}">Edit</a></td>
+					</tr>
+				</table>
+				<ul class="nav nav-pills">
+					<li th:each="page,status:${pages}"><a
+						th:class="${status.index==currentPage}?'btn btn-primary':'btn'"
+						th:href="@{patients(page=${status.index},size=${size},motCle=${motCle})}"
+						th:text="${status.index}"></a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	</div>
+</body>
+</html>
